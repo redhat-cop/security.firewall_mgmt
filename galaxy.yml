@@ -1,0 +1,11 @@
+namespace: ansible_security
+name: firewall_policy_automation
+version: 0.0.1
+readme: README.md
+authors:
+  - Ansible Security Community (ansible-security)
+description: Firewall Policy Automation validated role
+license_file: LICENSE
+dependencies:
+  "ansible.utils": "*"
+repository: https://github.com/ansible-security/security_rm_builder

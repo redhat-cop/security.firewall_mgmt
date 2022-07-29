@@ -1,0 +1,46 @@
+---
+# tasks file for firewall_policy_automation
+- name: Gathered the provided configuration with the exisiting running configuration
+  cisco.asa.asa_acls:
+    config:
+    state: gathered
+  tags: gathered
+  register: gather_result
+
+- name: Get the CURRENT WORKING DIR
+  command: "pwd"
+  register: dir
+
+- name: Create temporary build directory
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: build
+  register: tmp_directory
+
+- name: EXECUTE the python script
+  command: python3 filter.py "{{ gather_result }}" "{{ tmp_directory["path"] }}" "{{ filter_ip }}"
+  args:
+    chdir: "{{ dir['stdout'] }}/firewall_policy_automation/templates"
+  delegate_to: 127.0.0.1
+  run_once: true
+
+- name: Display multiple file contents
+  debug: var=item
+  with_file:
+    - "{{ tmp_directory['path'] }}/match.json"
+  register: test
+
+- name: get the file contents
+  command: cat "{{ tmp_directory['path'] }}/filter_htcnt_cmd.yml"
+  register: hitcnd_items
+
+- name: Get the Cisco ASA filtered ACL hitcount
+  cisco.asa.asa_command:
+    commands: "{{ item }}"
+  loop: "{{ hitcnd_items.stdout_lines }}"
+  register: cmd_out
+
+- name: Get the Hit Count for the filtered ACEs
+  debug:
+    msg: "{{ item.stdout[0] | regex_search('hitcnt=\\d+') }}"
+  loop: "{{ cmd_out.results }}"
