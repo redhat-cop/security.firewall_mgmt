@@ -1,7 +1,7 @@
-Firewall Policy Automation
-==========================
+security.firewall_mgmt 
+======================
 
-Role to manage and automate Firewall policies.
+Role to manage and automate Firewall policies and management.
 
 Example Playbook
 ----------------
