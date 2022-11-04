@@ -1,11 +1,15 @@
-namespace: ansible_security
-name: firewall_policy_automation
-version: 0.0.1
-readme: README.md
+---
 authors:
-  - Ansible Security Community (ansible-security)
-description: Firewall Policy Automation validated role
-license_file: LICENSE
+  - Sumit Jaiswal (@justjais)
 dependencies:
-  "ansible.utils": "*"
-repository: https://github.com/ansible-security/security_rm_builder
+  "cisco.asa": ">=3.0.0"
+  "ansible.netcommon": ">=1.13.0"
+license_file: LICENSE
+name: firewall_mgmt
+namespace: security
+description: Ansible Collection to build, maintain and validate FW management and policy over firewall appliances.
+readme: README.md
+repository: https://github.com/redhat-cop/security.firewall_mgmt
+issues: https://github.com/redhat-cop/security.firewall_mgmt/issues
+tags: [security, firewall, firewall management, asa]
+version: null
