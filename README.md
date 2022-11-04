@@ -1,8 +1,8 @@
-#Ansible Security Firewall Management Collection
+# Ansible Security Firewall Management Collection
 
 This repository contains the `security.firewall_mgmt` Ansible Collection.
 
-# Description
+## Description
 An Ansible Collection to build, maintain and validate Firewall management and policies across security providers firewall appliances. See Supported Providers section for more details.
 
 ## Example Playbook
