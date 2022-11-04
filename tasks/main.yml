@@ -8,8 +8,9 @@
   register: gather_result
 
 - name: Get the CURRENT WORKING DIR
-  command: "pwd"
+  ansible.builtin.command: "pwd"
   register: dir
+  changed_when: false
 
 - name: Create temporary build directory
   ansible.builtin.tempfile:
@@ -18,21 +19,23 @@
   register: tmp_directory
 
 - name: EXECUTE the python script
-  command: python3 filter.py "{{ gather_result }}" "{{ tmp_directory["path"] }}" "{{ filter_ip }}"
+  ansible.builtin.command: python3 filter.py "{{ gather_result }}" "{{ tmp_directory["path"] }}" "{{ filter_ip }}"
   args:
     chdir: "{{ dir['stdout'] }}/firewall_policy_automation/templates"
   delegate_to: 127.0.0.1
   run_once: true
+  changed_when: false
 
 - name: Display multiple file contents
-  debug: var=item
+  ansible.builtin.debug: var=item
   with_file:
     - "{{ tmp_directory['path'] }}/match.json"
   register: test
 
-- name: get the file contents
-  command: cat "{{ tmp_directory['path'] }}/filter_htcnt_cmd.yml"
+- name: Get the file contents
+  ansible.builtin.command: cat "{{ tmp_directory['path'] }}/filter_htcnt_cmd.yml"
   register: hitcnd_items
+  changed_when: false
 
 - name: Get the Cisco ASA filtered ACL hitcount
   cisco.asa.asa_command:
@@ -41,6 +44,6 @@
   register: cmd_out
 
 - name: Get the Hit Count for the filtered ACEs
-  debug:
+  ansible.builtin.debug:
     msg: "{{ item.stdout[0] | regex_search('hitcnt=\\d+') }}"
   loop: "{{ cmd_out.results }}"
